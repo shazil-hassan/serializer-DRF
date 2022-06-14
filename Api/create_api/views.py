@@ -37,4 +37,15 @@ def student_create(request):
             json_data=JSONRenderer().render(res)
             return HttpResponse(json_data,content_type='application/json')
 
-    
+@csrf_exempt
+def student_abc(request):
+    if request.method=='POST':
+        json_data=request.body
+        stream=io.BytesIO(json_data)
+        pythondata=JSONParser().parse(stream)
+        serializer=StudentSerializer(data=pythondata)
+        if serializer.is_valid():
+            serializer.save()
+            res={'msg':'Data created'}
+            json_data=JSONRenderer().render(res)
+            return HttpResponse(json_data,content_type='application/json')
