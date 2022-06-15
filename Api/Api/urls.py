@@ -8,5 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('studata/<int:pk>',views.student_data),
     path('studata/',views.student_list),
-    path('stucreate/',views.student_create)
+    path('stucreate/',views.student_create),
+    path('stuupdate/',views.student_update),
+    path('studelete/',views.student_delete),
 ]

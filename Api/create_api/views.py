@@ -38,14 +38,30 @@ def student_create(request):
             return HttpResponse(json_data,content_type='application/json')
 
 @csrf_exempt
-def student_abc(request):
-    if request.method=='POST':
+def student_update(request):
+    if request.method=='PUT':
         json_data=request.body
         stream=io.BytesIO(json_data)
         pythondata=JSONParser().parse(stream)
-        serializer=StudentSerializer(data=pythondata)
+        id=pythondata.get('id')
+        stu=Student.objects.get(id=id)
+        print(stu)
+        serializer=StudentSerializer(stu,data=pythondata,partial=True)
         if serializer.is_valid():
             serializer.save()
-            res={'msg':'Data created'}
+            res={'msg':'Data Updated'}
             json_data=JSONRenderer().render(res)
             return HttpResponse(json_data,content_type='application/json')
+            
+@csrf_exempt            
+def student_delete(request):
+    if request.method=='DELETE':
+        json_data=request.body
+        stream=io.BytesIO(json_data)
+        pythondata=JSONParser().parse(stream)
+        id=pythondata.get('id')
+        stu=Student.objects.get(id=id)
+        stu.delete()
+        res={'msg':'Data Remove'}
+        json_data=JSONRenderer().render(res)
+        return HttpResponse(json_data,content_type='application/json')
